@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Contains stock_block.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function stock_block_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the stock_block module.
+    case 'help.page.stock_block':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('A module to generate block of stock exchange data') . '</p>';
+      return $output;
+
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function stock_block_theme() {
+  return [
+    'stock_block' => [
+      'render element' => 'children',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_cron()
+ */
+function stock_block_cron() {
+
+    $block_ids = \Drupal::entityQuery('block_content')
+        ->condition('type','stock_exchange_rate_card')
+        ->execute();
+
+    foreach ($block_ids as $bid){
+        $block = \Drupal\block_content\Entity\BlockContent::load($bid);
+
+        $url = "http://dev.markitondemand.com/MODApis/Api/v2/Quote/json?symbol=".$block->get('field_symbol')->value;
+        $client = json_decode(\Drupal::httpClient()->get($url, array('headers' => array('Accept' => 'text/JSON')))->getBody());
+        $block->set('field_last_price',$client->LastPrice);
+        $block->set('field_change',$client->Change);
+        $block->save();
+    }
+}

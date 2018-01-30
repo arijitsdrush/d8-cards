@@ -1,0 +1,5 @@
+name: 'Stock Block'
+type: module
+description: 'A module to generate block of stock exchange data'
+core: 8.x
+package: 'Custom'
