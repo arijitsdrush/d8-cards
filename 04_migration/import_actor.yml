@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies: {  }
+id: import_actor
+migration_tags: null
+migration_group: imdb
+label: 'Migrate actor as taxonomy'
+source:
+  plugin: csv
+  path: 'public://actors.csv'
+  header_row_count: 1
+  keys:
+    - id
+  column_names:
+    -
+      id: id
+    -
+      name: name
+process:
+  vid:
+    plugin: default_value
+    default_value: imdb_actor
+  name: name
+destination:
+  plugin: 'entity:taxonomy_term'
+migration_dependencies: null
+
