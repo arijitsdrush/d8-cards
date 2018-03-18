@@ -1,0 +1,5 @@
+name: 'Asset'
+type: module
+description: 'Asset include example'
+core: 8.x
+package: 'Custom'

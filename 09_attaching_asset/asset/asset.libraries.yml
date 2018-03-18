@@ -1,0 +1,8 @@
+asset.css:
+  css:
+    theme:
+      css/table.css: {}
+
+asset.js:
+  js:
+    js/pstyle.js: {}
